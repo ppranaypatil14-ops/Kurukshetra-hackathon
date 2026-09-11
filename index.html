@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RepoSense — Software Supply Chain Security Analyzer</title>
+  <meta name="description" content="Secure your software supply chain before attackers do. RepoSense analyzes dependencies, detects typosquatting, dependency confusion, and critical vulnerabilities in real time." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Ambient Glow & Background Grid -->
+  <div class="cyber-grid"></div>
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="site-header" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo" aria-label="RepoSense Home">
+        <span class="logo-symbol">◈</span>
+        <span class="logo-text">Repo<span class="text-cyan">Sense</span></span>
+        <span class="badge-tag">v2.1</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#product" class="nav-link">Product</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#security" class="nav-link">Security</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-outline-cyan btn-sm open-scan-modal" id="navScanBtn">
+          <span class="scan-pulse"></span>
+          Scan Repository
+        </button>
+        <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle Menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section class="hero-section" id="hero">
+    <div class="container hero-grid">
+      <!-- Left Column: Copy & Input -->
+      <div class="hero-content">
+        <div class="hero-badge animate-fade-in">
+          <span class="status-indicator"></span>
+          <span class="badge-text">SOFTWARE SUPPLY CHAIN SECURITY</span>
+        </div>
+
+        <h1 class="hero-title animate-fade-up">
+          Secure Your Software Supply Chain.<br />
+          <span class="gradient-text">Before Attackers Do.</span>
+        </h1>
+
+        <p class="hero-description animate-fade-up delay-1">
+          Analyze your repository, uncover vulnerable and suspicious dependencies, detect supply-chain risks, and understand what needs to be fixed first.
+        </p>
+
+        <!-- Fast Scan Input Interactive Bar -->
+        <div class="hero-search-box animate-fade-up delay-2">
+          <div class="input-wrapper">
+            <svg class="git-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+            <input type="text" id="repoInput" placeholder="github.com/org/your-critical-repo" value="github.com/cloud-mesh/gateway-service" spellcheck="false" />
+          </div>
+          <button class="btn btn-primary open-scan-modal" id="heroScanBtn">
+            <span>Scan Your Repository</span>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <div class="hero-cta-secondary animate-fade-up delay-3">
+          <a href="#how-it-works" class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            See How It Works
+          </a>
+          <div class="hero-stats-pill">
+            <span class="stat-dot"></span>
+            <span>Zero-install CLI & Web analysis</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Dependency Network Interactive Canvas & Floating Risk Card -->
+      <div class="hero-visual-wrapper animate-fade-in delay-2">
+        <div class="network-glass-card">
+          <!-- Card Header Bar -->
+          <div class="card-topbar">
+            <div class="window-controls">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="graph-status-label">
+              <span class="pulse-cyan"></span>
+              <span>LIVE DEPENDENCY GRAPH &mdash; AST PARSER</span>
+            </div>
+            <div class="node-legend">
+              <span class="legend-item"><span class="legend-dot green"></span>Safe</span>
+              <span class="legend-item"><span class="legend-dot yellow"></span>Warn</span>
+              <span class="legend-item"><span class="legend-dot red"></span>Critical</span>
+            </div>
+          </div>
+
+          <!-- Interactive Graph Canvas Container -->
+          <div class="canvas-container" id="canvasContainer">
+            <canvas id="dependencyCanvas"></canvas>
+            
+            <!-- Graph Tooltip Element -->
+            <div class="graph-tooltip" id="graphTooltip">
+              <div class="tooltip-header">
+                <span class="tooltip-name" id="ttName">axios</span>
+                <span class="tooltip-version" id="ttVersion">v1.2.0</span>
+              </div>
+              <div class="tooltip-status" id="ttStatus">CRITICAL RISK</div>
+              <p class="tooltip-desc" id="ttDesc">Known SSRF flaw in proxy authentication</p>
+            </div>
+          </div>
+
+          <!-- Floating Risk Metric Card -->
+          <div class="floating-risk-card animate-float">
+            <div class="risk-card-glow"></div>
+            <div class="risk-card-header">
+              <span class="risk-card-title">Repository Risk</span>
+              <span class="risk-alert-icon">⚠️</span>
+            </div>
+            <div class="risk-score-display">
+              <div class="score-number">72 <span class="score-denominator">/ 100</span></div>
+              <div class="risk-pill high-risk">HIGH RISK</div>
+            </div>
+            <div class="risk-progress-bar">
+              <div class="risk-progress-fill" style="width: 72%;"></div>
+            </div>
+            <div class="risk-card-footer">
+              <div class="risk-stat">
+                <span class="stat-num text-red">3</span>
+                <span class="stat-lbl">CVEs</span>
+              </div>
+              <div class="risk-stat">
+                <span class="stat-num text-yellow">1</span>
+                <span class="stat-lbl">Typosquat</span>
+              </div>
+              <div class="risk-stat">
+                <span class="stat-num text-green">14</span>
+                <span class="stat-lbl">Secure</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Secondary Micro Floating Alert -->
+          <div class="floating-alert-card animate-float-slow">
+            <div class="alert-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ff3b5c" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div class="alert-content">
+              <div class="alert-title">Suspicious Package Detected</div>
+              <div class="alert-sub text-mono">typosquat: <strong>lod-ash@4.17.22</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROBLEM SECTION ================= -->
+  <section class="problem-section" id="problem">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-eyebrow">THE ATTACK SURFACE</span>
+        <h2 class="section-title">
+          Your code depends on <span class="gradient-text">more than you think.</span>
+        </h2>
+        <p class="section-subtitle">
+          Modern cloud applications consist of up to 90% open-source third-party dependencies. Attackers no longer break into your firewalls—they poison the packages you trust implicitly.
+        </p>
+      </div>
+
+      <div class="threat-grid">
+        <!-- Threat 1: Vulnerable Dependencies -->
+        <div class="threat-card glass-panel">
+          <div class="card-glow red"></div>
+          <div class="threat-header">
+            <div class="threat-icon-box red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <span class="threat-badge red">CRITICAL CVE</span>
+          </div>
+
+          <h3 class="threat-title">Vulnerable Dependencies</h3>
+          <p class="threat-desc">
+            Known security vulnerabilities lurking in nested transitive dependencies, allowing remote code execution, prototype pollution, and data exfiltration.
+          </p>
+
+          <div class="threat-terminal-box">
+            <div class="term-line"><span class="t-red">CRITICAL</span> CVE-2024-21413 in <span class="t-white">express-jwt@0.1.2</span></div>
+            <div class="term-line t-muted">├─ CVSS: 9.8 (Remote Code Execution)</div>
+            <div class="term-line t-cyan">└─ Fix Available: Upgrade to &gt;= 0.3.0</div>
+          </div>
+        </div>
+
+        <!-- Threat 2: Typosquatting -->
+        <div class="threat-card glass-panel">
+          <div class="card-glow yellow"></div>
+          <div class="threat-header">
+            <div class="threat-icon-box yellow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <span class="threat-badge yellow">IMITATION VECTOR</span>
+          </div>
+
+          <h3 class="threat-title">Typosquatting</h3>
+          <p class="threat-desc">
+            Malicious packages published with deceptively similar names to popular libraries, triggering automatic postinstall scripts that steal developer credentials.
+          </p>
+
+          <div class="threat-terminal-box">
+            <div class="term-line"><span class="t-yellow">SUSPICIOUS</span> Levenshtein Distance: 1</div>
+            <div class="term-line t-muted">├─ Legitimate: <span class="t-green">chalk</span> (240M DLs)</div>
+            <div class="term-line t-red">├─ Detected: <span class="t-red">cha1k</span> (Reverse Shell Hook)</div>
+            <div class="term-line t-cyan">└─ Action: Block registry install</div>
+          </div>
+        </div>
+
+        <!-- Threat 3: Dependency Confusion -->
+        <div class="threat-card glass-panel">
+          <div class="card-glow cyan"></div>
+          <div class="threat-header">
+            <div class="threat-icon-box cyan">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+            </div>
+            <span class="threat-badge cyan">REGISTRY HIJACK</span>
+          </div>
+
+          <h3 class="threat-title">Dependency Confusion</h3>
+          <p class="threat-desc">
+            Potential risks caused by package manager resolution mechanics, where public registries override your internal private company namespaces with malicious builds.
+          </p>
+
+          <div class="threat-terminal-box">
+            <div class="term-line"><span class="t-cyan">INTERNAL COLLISION</span> @corp-auth/crypto</div>
+            <div class="term-line t-muted">├─ Private Nexus: v1.4.0</div>
+            <div class="term-line t-red">├─ Public npm: v99.9.0 (Poisoned)</div>
+            <div class="term-line t-yellow">└─ Risk: Package manager pulls public v99.9</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section class="how-it-works-section" id="how-it-works">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-eyebrow">AUTOMATED PIPELINE</span>
+        <h2 class="section-title">
+          How <span class="gradient-text">RepoSense</span> Protects Your Stack
+        </h2>
+        <p class="section-subtitle">
+          A seamless 5-stage verification engine engineered to inspect every layer of your dependencies from commit to deployment.
+        </p>
+      </div>
+
+      <div class="flow-track">
+        <div class="flow-progress-line"></div>
+
+        <!-- Step 1 -->
+        <div class="flow-step">
+          <div class="step-badge">01</div>
+          <div class="step-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <h4 class="step-title">Repository</h4>
+          <p class="step-desc">Connect via GitHub URL, CLI, or CI/CD webhook with zero credential exposure.</p>
+        </div>
+
+        <div class="flow-connector-arrow">→</div>
+
+        <!-- Step 2 -->
+        <div class="flow-step">
+          <div class="step-badge">02</div>
+          <div class="step-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+              <line x1="6" y1="6" x2="6.01" y2="6"></line>
+              <line x1="6" y1="18" x2="6.01" y2="18"></line>
+            </svg>
+          </div>
+          <h4 class="step-title">Dependencies</h4>
+          <p class="step-desc">Parses package.json, poetry.lock, go.sum, and deep transitive dependency trees.</p>
+        </div>
+
+        <div class="flow-connector-arrow">→</div>
+
+        <!-- Step 3 -->
+        <div class="flow-step">
+          <div class="step-badge">03</div>
+          <div class="step-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="11" y1="8" x2="11" y2="14"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+          </div>
+          <h4 class="step-title">Security Analysis</h4>
+          <p class="step-desc">Cross-references known CVEs, maintainer behavior, install scripts, and heuristics.</p>
+        </div>
+
+        <div class="flow-connector-arrow">→</div>
+
+        <!-- Step 4 -->
+        <div class="flow-step">
+          <div class="step-badge">04</div>
+          <div class="step-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 20V10"></path>
+              <path d="M12 20V4"></path>
+              <path d="M6 20v-6"></path>
+            </svg>
+          </div>
+          <h4 class="step-title">Risk Assessment</h4>
+          <p class="step-desc">Synthesizes severity, exploitability, and attack surface into a unified 0-100 score.</p>
+        </div>
+
+        <div class="flow-connector-arrow">→</div>
+
+        <!-- Step 5 -->
+        <div class="flow-step">
+          <div class="step-badge">05</div>
+          <div class="step-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+          </div>
+          <h4 class="step-title">Remediation</h4>
+          <p class="step-desc">Delivers 1-click safe upgrade recommendations and pull-request patch branches.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES SECTION ================= -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-eyebrow">ENTERPRISE CAPABILITIES</span>
+        <h2 class="section-title">
+          Complete visibility into your <span class="gradient-text">software supply chain.</span>
+        </h2>
+        <p class="section-subtitle">
+          Engineered for DevSecOps teams that require deep telemetry, zero false alarms, and continuous automated guardrails.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Dependency Analysis</h3>
+          <p class="feature-desc">
+            Deep recursive traversal of direct and transitive packages across npm, PyPI, Cargo, Go, and Maven ecosystems.
+          </p>
+          <div class="feature-badge">Full Transitive Tree</div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Vulnerability Detection</h3>
+          <p class="feature-desc">
+            Instant matching against National Vulnerability Database (NVD), GitHub Security Advisories (GHSA), and OSV feeds.
+          </p>
+          <div class="feature-badge">Real-Time Threat Intel</div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <h3 class="feature-title">Dependency Graph</h3>
+          <p class="feature-desc">
+            Interactive, navigable topology map illustrating blast radius, package ownership clusters, and dangerous transit paths.
+          </p>
+          <div class="feature-badge">Interactive Topology</div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Typosquatting Detection</h3>
+          <p class="feature-desc">
+            Phonetic and Levenshtein string distance modeling to spot deceptive naming conventions and brand impersonations.
+          </p>
+          <div class="feature-badge">Heuristic AI Matching</div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Supply-Chain Risk Analysis</h3>
+          <p class="feature-desc">
+            Flags abandoned repositories, sudden maintainer turnover, obfuscated binary downloads, and install-lifecycle hooks.
+          </p>
+          <div class="feature-badge">Behavioral Telemetry</div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3 class="feature-title">Prioritized Remediation</h3>
+          <p class="feature-desc">
+            Smart upgrade paths showing minimum breaking changes so developers can patch critical bugs without breaking builds.
+          </p>
+          <div class="feature-badge">Semantic Version Aware</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VISUAL SECURITY SECTION (PRODUCT MOCKUP) ================= -->
+  <section class="security-showcase-section" id="security">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-eyebrow">INTELLIGENCE PLATFORM</span>
+        <h2 class="section-title">
+          Actionable telemetry <span class="gradient-text">at your fingertips.</span>
+        </h2>
+        <p class="section-subtitle">
+          Experience our comprehensive security dashboard layout showcasing real-time risk scores, package hierarchies, and prioritized remediation paths.
+        </p>
+      </div>
+
+      <!-- Large Attractive Product Showcase Mockup -->
+      <div class="dashboard-mockup-wrapper">
+        <div class="mockup-frame glass-panel">
+          <!-- Window Header Bar -->
+          <div class="mockup-topbar">
+            <div class="window-buttons">
+              <span class="btn-circle red"></span>
+              <span class="btn-circle yellow"></span>
+              <span class="btn-circle green"></span>
+            </div>
+            <div class="mockup-breadcrumb">
+              <span class="text-muted">reposense-scanner</span>
+              <span class="crumb-separator">/</span>
+              <span class="text-cyan">production-cluster-api</span>
+              <span class="crumb-separator">/</span>
+              <span class="crumb-tag">main (commit 4b89f02)</span>
+            </div>
+            <div class="mockup-meta">
+              <span class="live-tag"><span class="live-dot"></span> SCAN COMPLETE</span>
+            </div>
+          </div>
+
+          <!-- Dashboard Content Grid Inside Mockup -->
+          <div class="mockup-body">
+            <!-- Sidebar Navigation (Visual) -->
+            <div class="mockup-sidebar">
+              <div class="side-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <span>Overview</span>
+              </div>
+              <div class="side-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Vulnerabilities</span>
+                <span class="side-badge">3</span>
+              </div>
+              <div class="side-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                <span>Dependency Graph</span>
+              </div>
+              <div class="side-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>Supply Chain Score</span>
+              </div>
+              <div class="side-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                <span>Remediation PRs</span>
+              </div>
+            </div>
+
+            <!-- Main Panel Area -->
+            <div class="mockup-main">
+              <!-- KPI Metrics Row -->
+              <div class="mockup-kpi-row">
+                <div class="kpi-card risk-highlight">
+                  <div class="kpi-label">Repository Risk Score</div>
+                  <div class="kpi-value-wrap">
+                    <span class="kpi-num text-red">72</span>
+                    <span class="kpi-max">/ 100</span>
+                    <span class="kpi-status-badge badge-high">HIGH RISK</span>
+                  </div>
+                  <div class="kpi-progress">
+                    <div class="kpi-bar" style="width: 72%;"></div>
+                  </div>
+                  <span class="kpi-sub">Calculated across 84 total dependencies</span>
+                </div>
+
+                <div class="kpi-card">
+                  <div class="kpi-label">Critical Findings</div>
+                  <div class="kpi-num-large text-red">3 <span class="kpi-sub-tag">CVEs</span></div>
+                  <span class="kpi-sub">2 active exploits recorded in wild</span>
+                </div>
+
+                <div class="kpi-card">
+                  <div class="kpi-label">Supply Chain Threats</div>
+                  <div class="kpi-num-large text-yellow">2 <span class="kpi-sub-tag">Risks</span></div>
+                  <span class="kpi-sub">1 Typosquat, 1 Namespace collision</span>
+                </div>
+
+                <div class="kpi-card">
+                  <div class="kpi-label">Clean Packages</div>
+                  <div class="kpi-num-large text-green">79 <span class="kpi-sub-tag">Verified</span></div>
+                  <span class="kpi-sub">94.0% dependency integrity rating</span>
+                </div>
+              </div>
+
+              <!-- Interactive Tabs / Filter Showcase -->
+              <div class="mockup-tabs-bar">
+                <div class="tabs-list">
+                  <button class="tab-btn active" data-filter="all">All Findings (5)</button>
+                  <button class="tab-btn" data-filter="critical">Critical (3)</button>
+                  <button class="tab-btn" data-filter="supply-chain">Supply Chain Threats (2)</button>
+                </div>
+                <div class="tabs-search">
+                  <span class="search-icon">🔍</span>
+                  <input type="text" placeholder="Filter by package or CVE..." readonly value="Filtered: High Severity" />
+                </div>
+              </div>
+
+              <!-- Security Findings Table Preview -->
+              <div class="mockup-table-container">
+                <table class="mockup-table">
+                  <thead>
+                    <tr>
+                      <th>SEVERITY</th>
+                      <th>PACKAGE</th>
+                      <th>THREAT TYPE</th>
+                      <th>IMPACT / CVE</th>
+                      <th>REMEDIATION</th>
+                      <th>ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="table-row-danger" data-category="critical">
+                      <td><span class="severity-tag critical">CRITICAL</span></td>
+                      <td>
+                        <div class="pkg-cell">
+                          <span class="pkg-name">jsonwebtoken</span>
+                          <span class="pkg-ver">9.0.0</span>
+                        </div>
+                      </td>
+                      <td><span class="type-tag code-exec">RCE Flaw</span></td>
+                      <td><span class="text-mono">CVE-2022-23529 (CVSS 9.8)</span></td>
+                      <td><span class="rem-fix text-green">Update to v9.0.2</span></td>
+                      <td><button class="btn-table-action">Create Fix PR</button></td>
+                    </tr>
+
+                    <tr class="table-row-danger" data-category="supply-chain">
+                      <td><span class="severity-tag high">HIGH</span></td>
+                      <td>
+                        <div class="pkg-cell">
+                          <span class="pkg-name text-yellow">lod-ash</span>
+                          <span class="pkg-ver text-red">4.17.21 (Squat)</span>
+                        </div>
+                      </td>
+                      <td><span class="type-tag typosquat">Typosquatting</span></td>
+                      <td><span class="text-mono">Preinstall Script Exfiltration</span></td>
+                      <td><span class="rem-fix text-green">Replace with `lodash`</span></td>
+                      <td><button class="btn-table-action">Quarantine</button></td>
+                    </tr>
+
+                    <tr class="table-row-danger" data-category="critical">
+                      <td><span class="severity-tag critical">CRITICAL</span></td>
+                      <td>
+                        <div class="pkg-cell">
+                          <span class="pkg-name">axios</span>
+                          <span class="pkg-ver">1.2.0</span>
+                        </div>
+                      </td>
+                      <td><span class="type-tag ssrf">SSRF Attack</span></td>
+                      <td><span class="text-mono">CVE-2023-45857 (CVSS 9.1)</span></td>
+                      <td><span class="rem-fix text-green">Update to v1.6.8</span></td>
+                      <td><button class="btn-table-action">Create Fix PR</button></td>
+                    </tr>
+
+                    <tr class="table-row-danger" data-category="supply-chain">
+                      <td><span class="severity-tag medium">MEDIUM</span></td>
+                      <td>
+                        <div class="pkg-cell">
+                          <span class="pkg-name">@internal/auth</span>
+                          <span class="pkg-ver">1.0.0</span>
+                        </div>
+                      </td>
+                      <td><span class="type-tag confusion">Dependency Confusion</span></td>
+                      <td><span class="text-mono">Public npm Namespace Collision</span></td>
+                      <td><span class="rem-fix text-cyan">Scoped Private Registry</span></td>
+                      <td><button class="btn-table-action">Enforce Scope</button></td>
+                    </tr>
+
+                    <tr class="table-row-safe" data-category="safe">
+                      <td><span class="severity-tag safe">PASSED</span></td>
+                      <td>
+                        <div class="pkg-cell">
+                          <span class="pkg-name">typescript</span>
+                          <span class="pkg-ver">5.3.3</span>
+                        </div>
+                      </td>
+                      <td><span class="type-tag verified">Verified</span></td>
+                      <td><span class="text-mono">Cryptographically Signed</span></td>
+                      <td><span class="rem-fix text-muted">Up to date</span></td>
+                      <td><span class="text-green text-mono">✓ Validated</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FINAL CTA ================= -->
+  <section class="final-cta-section" id="cta">
+    <div class="container">
+      <div class="cta-card glass-panel text-center">
+        <div class="cta-glow"></div>
+        <div class="badge-tag mx-auto">DEFEND YOUR ECOSYSTEM</div>
+        <h2 class="cta-title">
+          Know what's inside <span class="gradient-text">your dependencies.</span>
+        </h2>
+        <p class="cta-subtext">
+          Find the risks before they become attacks.
+        </p>
+
+        <div class="cta-buttons">
+          <button class="btn btn-primary btn-lg open-scan-modal" id="ctaScanBtn">
+            <span>Scan Your Repository</span>
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <div class="cta-guarantees">
+          <span>✓ Instant zero-token analysis</span>
+          <span>✓ Support for npm, PyPI, Go, Maven</span>
+          <span>✓ Privacy-first AST AST scanner</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <span class="logo-symbol">◈</span>
+            <span class="logo-text">Repo<span class="text-cyan">Sense</span></span>
+          </div>
+          <p class="footer-tagline">Software Supply Chain Security Analyzer</p>
+          <div class="footer-status-pill">
+            <span class="status-pulse-green"></span>
+            <span>Threat Intelligence Feed Active</span>
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <div class="footer-col">
+            <span class="footer-heading">Navigation</span>
+            <a href="#product">Product</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#features">Features</a>
+            <a href="#security">Security</a>
+          </div>
+          <div class="footer-col">
+            <span class="footer-heading">Ecosystem</span>
+            <a href="https://github.com/ppranaypatil14-ops/Kurukshetra-hackathon" target="_blank" rel="noreferrer">GitHub Repository</a>
+            <a href="#security">Advisory Feed</a>
+            <a href="#hero">Scan CLI</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-hackathon-badge">
+          <span>Built for <strong>KuruKshetra 2.0 — Cybersecurity & Blockchain</strong></span>
+        </div>
+        <div class="footer-copyright">
+          © 2026 RepoSense. All rights reserved. Single-page security preview.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= INTERACTIVE REPOSITORY SCAN MODAL (DEMO SIMULATION) ================= -->
+  <div class="scan-modal-overlay" id="scanModal">
+    <div class="scan-modal-dialog glass-panel">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="logo-symbol">◈</span>
+          <h3>RepoSense Quick Scan Simulation</h3>
+        </div>
+        <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-repo-input-group">
+          <label for="modalRepoInput">Target Repository or Dependency Manifest</label>
+          <div class="input-with-action">
+            <input type="text" id="modalRepoInput" value="github.com/cloud-mesh/gateway-service" spellcheck="false" />
+            <button class="btn btn-primary btn-sm" id="runSimulationBtn">Start Scan</button>
+          </div>
+        </div>
+
+        <!-- Live Scan Terminal Activity Feed -->
+        <div class="scan-terminal" id="scanTerminal">
+          <div class="term-header">
+            <div class="term-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="term-title">reposense-ast-core :: realtime log</span>
+          </div>
+          <div class="term-console-body" id="consoleBody">
+            <div class="term-row">[READY] Standing by to parse package manifest and lockfiles...</div>
+          </div>
+        </div>
+
+        <!-- Scan Result Summary Preview (Revealed upon scan completion) -->
+        <div class="scan-result-summary" id="scanResultSummary" style="display: none;">
+          <div class="result-risk-banner high">
+            <div class="result-score-block">
+              <span class="res-num">72</span>
+              <span class="res-denom">/100</span>
+            </div>
+            <div class="result-text-block">
+              <h4>HIGH SUPPLY CHAIN RISK DETECTED</h4>
+              <p>Found 3 Critical CVEs, 1 Typosquatting candidate, and 1 Dependency Confusion risk.</p>
+            </div>
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-outline-cyan btn-sm" id="restartScanBtn">Scan Another Repo</button>
+            <a href="#security" class="btn btn-primary btn-sm" id="viewDetailsBtn">View In Security Matrix</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="main.js"></script>
+</body>
+</html>
