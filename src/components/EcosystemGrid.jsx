@@ -1,17 +1,33 @@
 import React from 'react'
+import TiltCard from './TiltCard'
+import { useInView } from '../hooks/useInView'
 
 export default function EcosystemGrid() {
+  const [sectionRef, isInView] = useInView({ threshold: 0.15, rootMargin: '0px 0px -40px 0px' })
+
   return (
-    <section className="w-full bg-[#f4ede4] text-[#16131c] py-16 px-4 sm:px-8 lg:px-12 relative overflow-hidden border-t border-neutral-300/60">
+    <section
+      ref={sectionRef}
+      className="w-full bg-[#f4ede4] text-[#16131c] py-16 px-4 sm:px-8 lg:px-12 relative overflow-hidden border-t border-neutral-300/60"
+    >
       <div className="max-w-[1440px] mx-auto">
-        <div className="text-center mb-6">
+        {/* Section Header */}
+        <div
+          className={`text-center mb-6 transition-all duration-500 ${
+            isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[25px]'
+          }`}
+        >
           <p className="text-xs md:text-sm font-semibold tracking-widest text-neutral-500 uppercase">
             Built for the Modern Software Supply Chain
           </p>
         </div>
 
         {/* Registry & Ecosystem Grid */}
-        <div className="w-full border border-neutral-300/80 bg-white/40 rounded-sm mb-16 overflow-hidden shadow-sm">
+        <div
+          className={`w-full border border-neutral-300/80 bg-white/40 rounded-sm mb-16 overflow-hidden shadow-sm transition-all duration-500 delay-75 ${
+            isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-[25px] scale-[0.98]'
+          }`}
+        >
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
             {/* GitHub */}
             <div className="flex items-center justify-center p-6 border-b sm:border-b-0 border-r border-neutral-300/80 h-24 gap-2.5">
@@ -117,58 +133,83 @@ export default function EcosystemGrid() {
           </div>
         </div>
 
-        {/* Stats and Feature Cards */}
+        {/* Feature Cards with 50-100ms Stagger and 0.98 -> 1 scale */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* 10,000+ Stat Card */}
-          <div className="lg:col-span-4 bg-white rounded-lg p-8 shadow-sm border border-neutral-200/80 relative min-h-[220px] flex flex-col justify-between">
-            <div className="flex items-start justify-between">
-              <span className="text-4xl sm:text-5xl font-extrabold tracking-tight text-neutral-900">10,000+</span>
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#9d174d] to-[#d946ef] p-[1.5px] flex items-center justify-center shadow-md shadow-pink-500/20">
-                <div className="w-full h-full bg-gradient-to-b from-[#db2777] to-[#9333ea] rounded-md flex items-center justify-center text-white">
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14.5v-4H8.5L13 5.5v4h2.5L11 16.5z"></path>
-                  </svg>
+          <div
+            className={`lg:col-span-4 transition-all duration-500 delay-100 ${
+              isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-[25px] scale-[0.98]'
+            }`}
+          >
+            <TiltCard maxTilt={1.0}>
+              <div className="bg-white rounded-lg p-8 shadow-sm border border-neutral-200/80 relative min-h-[220px] flex flex-col justify-between">
+                <div className="flex items-start justify-between">
+                  <span className="text-4xl sm:text-5xl font-extrabold tracking-tight text-neutral-900">10,000+</span>
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#9d174d] to-[#d946ef] p-[1.5px] flex items-center justify-center shadow-md shadow-pink-500/20">
+                    <div className="w-full h-full bg-gradient-to-b from-[#db2777] to-[#9333ea] rounded-md flex items-center justify-center text-white">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14.5v-4H8.5L13 5.5v4h2.5L11 16.5z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p className="font-bold text-neutral-900 text-sm sm:text-base mt-8 mb-4">Attacks blocked every week</p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-[2px] bg-neutral-400"></span>
+                    <span className="w-2 h-2 rounded-[2px] border border-neutral-400"></span>
+                    <span className="w-2 h-2 rounded-[2px] border border-neutral-400"></span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <p className="font-bold text-neutral-900 text-sm sm:text-base mt-8 mb-4">Attacks blocked every week</p>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-[2px] bg-neutral-400"></span>
-                <span className="w-2 h-2 rounded-[2px] border border-neutral-400"></span>
-                <span className="w-2 h-2 rounded-[2px] border border-neutral-400"></span>
-              </div>
-            </div>
+            </TiltCard>
           </div>
 
           {/* Blocked by DeepScan Version Widget */}
-          <div className="lg:col-span-3 flex items-center justify-center py-4">
-            <div className="relative w-[190px] h-[190px]">
-              <div className="absolute top-0 left-0 w-[110px] h-[110px] bg-[#d73a3a] z-10 flex flex-col justify-between p-2.5 shadow-md">
-                <div className="absolute -top-3 left-3 bg-[#1e1a29] text-white px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 border border-purple-400/20 shadow-lg whitespace-nowrap">
-                  <svg className="w-3 h-3 text-purple-300 fill-current" viewBox="0 0 24 24">
-                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path>
-                  </svg>
-                  <span>Blocked by DeepScan</span>
+          <div
+            className={`lg:col-span-3 flex items-center justify-center py-4 transition-all duration-500 delay-150 ${
+              isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-[25px] scale-[0.98]'
+            }`}
+          >
+            <TiltCard maxTilt={1.0}>
+              <div className="relative w-[190px] h-[190px]">
+                <div className="absolute top-0 left-0 w-[110px] h-[110px] bg-[#d73a3a] z-10 flex flex-col justify-between p-2.5 shadow-md">
+                  <div className="absolute -top-3 left-3 bg-[#1e1a29] text-white px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 border border-purple-400/20 shadow-lg whitespace-nowrap">
+                    <svg className="w-3 h-3 text-purple-300 fill-current" viewBox="0 0 24 24">
+                      <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path>
+                    </svg>
+                    <span>Blocked by DeepScan</span>
+                  </div>
+                  <div className="mt-auto font-mono text-xs font-bold text-white">1.1.2</div>
                 </div>
-                <div className="mt-auto font-mono text-xs font-bold text-white">1.1.2</div>
+                <div className="absolute bottom-0 right-0 w-[110px] h-[110px] bg-[#221c2e] z-0 flex flex-col justify-end p-2.5 shadow-lg">
+                  <div className="font-mono text-xs font-bold text-white">1.2.0</div>
+                </div>
               </div>
-              <div className="absolute bottom-0 right-0 w-[110px] h-[110px] bg-[#221c2e] z-0 flex flex-col justify-end p-2.5 shadow-lg">
-                <div className="font-mono text-xs font-bold text-white">1.2.0</div>
-              </div>
-            </div>
+            </TiltCard>
           </div>
 
           {/* Explainer Card */}
-          <div className="lg:col-span-5 bg-white/60 rounded-lg p-8 sm:p-10 border border-neutral-200/80 flex flex-col justify-between min-h-[220px]">
-            <h2 className="text-lg sm:text-xl font-bold text-neutral-900 leading-snug tracking-tight mb-6">
-              Open source makes up 90% of modern application code. DeepScan scans every package and update for malicious behavior across all major registries.
-            </h2>
-            <div>
-              <a className="inline-flex items-center justify-center bg-[#1e1a29] hover:bg-black text-white font-bold text-sm px-6 py-3 rounded-full transition-colors shadow-sm" href="#about">
-                What is DeepScan?
-              </a>
-            </div>
+          <div
+            className={`lg:col-span-5 transition-all duration-500 delay-200 ${
+              isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-[25px] scale-[0.98]'
+            }`}
+          >
+            <TiltCard maxTilt={1.0}>
+              <div className="bg-white/60 rounded-lg p-8 sm:p-10 border border-neutral-200/80 flex flex-col justify-between min-h-[220px]">
+                <h2 className="text-lg sm:text-xl font-bold text-neutral-900 leading-snug tracking-tight mb-6">
+                  Open source makes up 90% of modern application code. DeepScan scans every package and update for malicious behavior across all major registries.
+                </h2>
+                <div>
+                  <a
+                    className="inline-flex items-center justify-center bg-[#1e1a29] hover:bg-black text-white font-bold text-sm px-6 py-3 rounded-full transition-colors shadow-sm"
+                    href="#about"
+                  >
+                    What is DeepScan?
+                  </a>
+                </div>
+              </div>
+            </TiltCard>
           </div>
         </div>
       </div>

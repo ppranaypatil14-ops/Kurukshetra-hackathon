@@ -1,7 +1,17 @@
 import React, { useState } from 'react'
 
-export default function Navbar() {
+export default function Navbar({ onQuickScan }) {
   const [searchValue, setSearchValue] = useState('')
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    if (searchValue.trim() && onQuickScan) {
+      onQuickScan(searchValue.trim())
+    } else {
+      const el = document.getElementById('scan')
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <header className="w-full border-b border-white/5 bg-[#16131c]/95 backdrop-blur-md sticky top-0 z-50">
@@ -28,22 +38,30 @@ export default function Navbar() {
 
         {/* Right Action Items */}
         <div className="flex items-center space-x-4">
-          <div className="hidden sm:flex items-center bg-[#292138] border border-purple-500/20 rounded-full px-3.5 py-1.5 focus-within:border-purple-400/50 transition-all">
-            <span className="text-xs font-semibold text-purple-300 mr-2 tracking-wide">Repository</span>
+          <form onSubmit={handleSearchSubmit} className="hidden sm:flex items-center bg-[#292138] border border-purple-500/20 rounded-full px-3.5 py-1.5 focus-within:border-purple-400/50 transition-all">
+            <span className="text-xs font-semibold text-purple-300 mr-2 tracking-wide">Repo</span>
             <input
               type="text"
-              placeholder="Search or audit..."
+              placeholder="github.com/user/repo"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="bg-transparent border-0 p-0 text-xs text-white placeholder-purple-300/50 focus:ring-0 w-28 md:w-36 outline-none"
+              className="bg-transparent border-0 p-0 text-xs text-white placeholder-purple-300/50 focus:ring-0 w-28 md:w-40 outline-none font-mono"
             />
-            <button aria-label="Search" className="text-purple-300 hover:text-white transition-colors ml-1" type="button">
+            <button aria-label="Search" className="text-purple-300 hover:text-white transition-colors ml-1" type="submit">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                 <path d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round"></path>
               </svg>
             </button>
-          </div>
-          <a className="bg-white text-black text-[14px] font-bold px-5 py-2.5 rounded-full hover:bg-neutral-100 active:scale-95 transition-all shadow-sm" href="#scan">
+          </form>
+          <a
+            className="bg-white text-black text-[14px] font-bold px-5 py-2.5 rounded-full hover:bg-neutral-100 active:scale-95 transition-all shadow-sm"
+            href="#scan"
+            onClick={(e) => {
+              e.preventDefault()
+              const el = document.getElementById('scan')
+              if (el) el.scrollIntoView({ behavior: 'smooth' })
+            }}
+          >
             Scan Repository
           </a>
         </div>

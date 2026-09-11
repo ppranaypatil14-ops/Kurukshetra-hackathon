@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 1. Global Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
 @layer utilities {
   /* Subtle background glow effect */
   .hero-glow {
@@ -28,5 +33,34 @@
       width: 52px;
       height: 52px;
     }
+  }
+
+  /* Clean, subtle reveal transition (25px translateY) */
+  .reveal-fade-up {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal-fade-up-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Gentle pulse on risk node */
+  @keyframes nodePulseSubtle {
+    0%, 100% {
+      opacity: 0.9;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.015);
+    }
+  }
+
+  .threat-node-pulse {
+    animation: nodePulseSubtle 3s ease-in-out infinite;
   }
 }

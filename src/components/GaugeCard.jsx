@@ -1,6 +1,19 @@
 import React from 'react'
 
-export default function GaugeCard({ score = 72 }) {
+export default function GaugeCard({
+  score = 72,
+  riskLevel = 'Risk Score',
+  severityCounts = { Critical: 2, High: 5, Medium: 8, Low: 12, Unknown: 0 },
+}) {
+  // Semi-circle perimeter calculation (r=45, half circle circumference ~ 141)
+  const clampedScore = Math.min(Math.max(score ?? 0, 0), 100)
+  const strokeOffset = 141 - (141 * (clampedScore / 100))
+
+  const critCount = severityCounts?.Critical ?? 0
+  const highCount = severityCounts?.High ?? 0
+  const medCount = severityCounts?.Medium ?? 0
+  const lowCount = (severityCounts?.Low ?? 0) + (severityCounts?.Unknown ?? 0)
+
   return (
     <div className="relative w-72 mx-auto lg:ml-auto lg:mr-12 mb-[-32px] z-20">
       <div className="bg-[#241c38]/95 backdrop-blur-md rounded-2xl border border-purple-500/25 p-5 shadow-2xl shadow-purple-950/60">
@@ -19,14 +32,17 @@ export default function GaugeCard({ score = 72 }) {
               strokeLinecap="round"
               strokeWidth="3"
             />
-            {/* Glowing active arc */}
+            {/* Glowing active arc - matches backend score */}
             <circle
-              className="gauge-path"
+              className="gauge-path transition-all duration-1000 ease-out"
               cx="50"
               cy="50"
               fill="none"
               r="45"
               stroke="url(#gauge-gradient)"
+              strokeDasharray="141 141"
+              strokeDashoffset={strokeOffset}
+              strokeLinecap="round"
               strokeWidth="3.5"
             />
             <defs>
@@ -39,28 +55,32 @@ export default function GaugeCard({ score = 72 }) {
           </svg>
           {/* Center Gauge Metric */}
           <div className="text-center z-10 pb-1">
-            <div className="text-3xl font-extrabold text-white tracking-tight leading-none">{score}</div>
-            <div className="text-[11px] font-medium text-purple-300/80 mt-1 uppercase tracking-wider">Risk Score</div>
+            <div className="text-3xl font-extrabold text-white tracking-tight leading-none">
+              {score ?? '--'}
+            </div>
+            <div className="text-[11px] font-bold text-purple-300/80 mt-1 uppercase tracking-wider">
+              {riskLevel || 'Risk Score'}
+            </div>
           </div>
         </div>
 
-        {/* Metric Badges Row */}
+        {/* Metric Badges Row (Connected directly to backend severity_counts) */}
         <div className="mt-4 pt-3 border-t border-purple-800/30 flex items-center justify-between text-xs font-semibold px-1">
-          <div className="flex items-center gap-1.5 text-neutral-300" title="Critical Vulnerabilities">
+          <div className="flex items-center gap-1.5 text-neutral-300" title="Critical Severity Alerts">
             <span className="w-0 h-0 border-x-[4px] border-x-transparent border-b-[8px] border-b-rose-500 inline-block"></span>
-            <span>2</span>
+            <span>{critCount}</span>
           </div>
           <div className="flex items-center gap-1.5 text-neutral-300" title="High Severity Alerts">
             <span className="w-2 h-2 rotate-45 bg-amber-500 inline-block"></span>
-            <span>5</span>
+            <span>{highCount}</span>
           </div>
           <div className="flex items-center gap-1.5 bg-white/10 px-2 py-0.5 rounded border border-purple-400/30 text-white" title="Medium Severity Alerts">
             <span className="w-2 h-2 bg-yellow-400 inline-block"></span>
-            <span>8</span>
+            <span>{medCount}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-neutral-400" title="Informational / Clean Packages">
+          <div className="flex items-center gap-1.5 text-neutral-400" title="Low or Clean Packages">
             <span className="w-2 h-2 rounded-full bg-slate-400 inline-block"></span>
-            <span>12</span>
+            <span>{lowCount}</span>
           </div>
         </div>
       </div>
