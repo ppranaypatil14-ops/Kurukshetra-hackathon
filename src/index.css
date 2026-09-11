@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Subtle background glow effect */
+  .hero-glow {
+    background: radial-gradient(circle at 65% 45%, rgba(103, 34, 138, 0.22) 0%, rgba(22, 19, 28, 0) 70%);
+  }
+
+  /* Gauge arc styling */
+  .gauge-path {
+    stroke-dasharray: 283;
+    stroke-dashoffset: 65;
+    stroke-linecap: round;
+    transform-origin: center;
+  }
+
+  /* Pixel grid pattern utilities */
+  .pixel-box {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .pixel-box {
+      width: 52px;
+      height: 52px;
+    }
+  }
+}
