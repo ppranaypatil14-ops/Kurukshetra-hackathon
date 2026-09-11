@@ -1,4 +1,4 @@
-# ◈ RepoSense
+# ◈ Deepscan
 
 > **Software Supply Chain Security Analyzer**  
 > *Built for KuruKshetra 2.0 — Cybersecurity & Blockchain*
